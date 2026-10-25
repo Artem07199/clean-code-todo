@@ -3,6 +3,17 @@ const addTaskButton = document.getElementsByTagName("button")[0];
 const incompleteTasksList = document.getElementById("incompleteTasks");
 const completedTasksList = document.getElementById("completed-tasks");
 
+const createDeleteButton = function () {
+  const deleteButton = document.createElement("button");
+  const deleteButtonImg = document.createElement("img");
+
+  deleteButton.className = "delete";
+  deleteButtonImg.src = "./remove.svg";
+  deleteButton.appendChild(deleteButtonImg);
+
+  return deleteButton;
+};
+
 const createNewTaskElement = function (taskText) {
   const taskItem = document.createElement("li");
 
@@ -10,9 +21,7 @@ const createNewTaskElement = function (taskText) {
   const label = document.createElement("label");
   const taskTextInput = document.createElement("input");
   const editButton = document.createElement("button");
-
-  const deleteButton = document.createElement("button");
-  const deleteButtonImg = document.createElement("img");
+  const deleteButton = createDeleteButton();
 
   label.innerText = taskText;
   label.className = "task";
@@ -23,10 +32,6 @@ const createNewTaskElement = function (taskText) {
 
   editButton.innerText = "Edit"; //innerText encodes special characters, HTML does not.
   editButton.className = "edit";
-
-  deleteButton.className = "delete";
-  deleteButtonImg.src = "./remove.svg";
-  deleteButton.appendChild(deleteButtonImg);
 
   taskItem.appendChild(checkBox);
   taskItem.appendChild(label);
@@ -88,10 +93,6 @@ const bindTaskEvents = function (taskItem) {
   checkBox.onchange = toggleTaskStatus;
 };
 
-for (let i = 0; i < incompleteTasksList.children.length; i++) {
-  bindTaskEvents(incompleteTasksList.children[i]);
-}
-
-for (let i = 0; i < completedTasksList.children.length; i++) {
-  bindTaskEvents(completedTasksList.children[i]);
-}
+[...incompleteTasksList.children, ...completedTasksList.children].forEach(
+  bindTaskEvents,
+);
